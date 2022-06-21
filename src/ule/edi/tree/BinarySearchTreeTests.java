@@ -76,6 +76,23 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	public void testToString() {
+	    Assert.assertEquals(ejemplo.toString(), "{10, {5, {2, ∅, ∅}, ∅}, {20, {15, ∅, ∅}, {30, ∅, ∅}}}");
+	}
+	
+	@Test
+	public void testIteratorWidth() {
+			
+			Iterator <Integer> oIt = other.iteratorWidth();
+	        String cadena="";
+	        while(oIt.hasNext()) {
+	            cadena+=oIt.next()+" ";
+	        }
+	        Assert.assertEquals("10 5 20 2 15 12 ", cadena);
+
+		}
+	
+	@Test
 	public void testRemoveCountMayor1HastaVaciar() {
 		ejemplo.insert(20);
 		ejemplo.insert(20);
