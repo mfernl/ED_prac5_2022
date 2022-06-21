@@ -81,14 +81,34 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	public void testGetPath() {
+	    Assert.assertEquals("" , ejemplo.getPath(10));
+	    Assert.assertEquals("LL" , ejemplo.getPath(2));
+	    Assert.assertEquals("RL" , ejemplo.getPath(15));
+	}
+	
+	@Test
 	public void testIteratorWidth() {
 			
-			Iterator <Integer> oIt = other.iteratorWidth();
+			Iterator <Integer> prueba = other.iteratorWidth();
 	        String cadena="";
-	        while(oIt.hasNext()) {
-	            cadena+=oIt.next()+" ";
+	        while(prueba.hasNext()) {
+	            cadena+=prueba.next()+" ";
 	        }
 	        Assert.assertEquals("10 5 20 2 15 12 ", cadena);
+
+		}
+	
+	@Test
+	public void testIteratorWidthInstances() {
+			other.insert(20);
+			other.insert(20);
+			Iterator <Integer> prueba = other.iteratorWidthInstances();
+	        String cadena="";
+	        while(prueba.hasNext()) {
+	            cadena+=prueba.next()+" ";
+	        }
+	        Assert.assertEquals("10 5 20 20 20 2 15 12 ", cadena);
 
 		}
 	
@@ -123,7 +143,30 @@ public class BinarySearchTreeTests {
 		Assert.assertEquals("{15, {5, {2, ∅, ∅}, ∅}, {20, ∅, {30, ∅, ∅}}}",ejemplo.toString());
 	}
 	
-		
+	@Test
+	public void testtagPosDescend() {
+			ejemplo = new BinarySearchTreeImpl<Integer>();
+			ejemplo.insert(50, 30, 10, 40, 80, 60);
+			ejemplo.tagPosDescend();
+			Assert.assertEquals("{50 [(descend, 3)], {30 [(descend, 5)], {10 [(descend, 6)], ∅, ∅}, {40 [(descend, 4)], ∅, ∅}}, {80 [(descend, 1)], {60 [(descend, 2)], ∅, ∅}, ∅}}",ejemplo.toString());
+	}
+	
+	@Test
+	public void testTagInOrden() {
+			ejemplo = new BinarySearchTreeImpl<Integer>();
+			ejemplo.insert(30, 10, 5, 2, 20, 15, 12);
+			ejemplo.tagInternalInorder();
+			Assert.assertEquals("{30 [(internal, 7)], {10 [(internal, 3)], {5 [(internal, 2)], {2, ∅, ∅}, ∅}, {20 [(internal, 6)], {15 [(internal, 5)], {12, ∅, ∅}, ∅}, ∅}}, ∅}",ejemplo.toString());
+			Assert.assertEquals(5,ejemplo.tagInternalInorder());
+	}
+	
+	@Test
+	public void testTagOnlySon() {
+			other.tagOnlySonPreorder();
+			Assert.assertEquals("{10, {5, {2 [(onlySon, 3)], ∅, ∅}, ∅}, {20, {15 [(onlySon, 5)], {12 [(onlySon, 6)], ∅, ∅}, ∅}, ∅}}",other.toString());
+			Assert.assertEquals(3,other.tagOnlySonPreorder());
+	}
+	
 	@Test
 	public void testTagHeightLeafEjemplo() {
 			other.tagHeightLeaf();
