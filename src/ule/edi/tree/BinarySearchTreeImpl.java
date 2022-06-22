@@ -189,7 +189,7 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 			setRightBST(new BinarySearchTreeImpl<T>(this));
 			insrt = true;
 		}
-	 return true;
+	 return insrt;
 	}
 
 	/**
@@ -462,26 +462,25 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 */
 	public BinarySearchTreeImpl<T> getSubtreeWithPath(String path) {
 		BinarySearchTreeImpl<T> resultado = this;
-		if(path != null) {
-			while(path.charAt(0) == 'R' || path.charAt(0) == 'L') {
-				if(path.charAt(0) == 'R') {
-					if(getRightBST().content == null) {
-						throw new NoSuchElementException();
+		if(!path.equals("")) {
+			if(path != null) {
+					if(path.charAt(0) == 'R') {
+						if(getRightBST().content == null) {
+							throw new NoSuchElementException();
+						}else {
+							path = path.substring(1);
+							resultado = getRightBST().getSubtreeWithPath(path);
+						}
 					}else {
-						path = path.substring(1);
-						resultado = getRightBST().getSubtreeWithPath(path);
+						if(getLeftBST().content == null) {
+							throw new NoSuchElementException();
+						}else {
+							path = path.substring(1);
+							resultado = getLeftBST().getSubtreeWithPath(path);
+						}
 					}
-				}else {
-					if(getLeftBST().content == null) {
-						throw new NoSuchElementException();
-					}else {
-						path = path.substring(1);
-						resultado = getLeftBST().getSubtreeWithPath(path);
-					}
-				}
 			}
 		}
-		
 	return resultado;
 	} 
 	
@@ -711,7 +710,7 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 		}
 		int tag = 1;
 		T result = startRoad(elem).camino(up, right);
-		marcaCarretera(tag,up,right);
+		startRoad(elem).marcaCarretera(tag,up,right);
 		return result;
 	}
 	
@@ -732,11 +731,15 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 			if(father != null) {
 				up--;
 				result = father.camino(up, right);
+			}else {
+				throw new NoSuchElementException();
 			}
 		}else if(right > 0){
 			if(getRightBST().content != null) {
 				right--;
 				result = getRightBST().camino(up, right);
+			}else {
+				throw new NoSuchElementException();
 			}
 		}
 		
@@ -744,15 +747,11 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	}
 	 private void marcaCarretera(int tag, int up, int right) {
 		 if(up > 0) {
-				setTag("road",tag);
-				tag++;
-				up--;
-				father.marcaCarretera(up, right, tag);
+				setTag("road",tag);;
+				father.marcaCarretera(tag+1, up-1, right);
 			}else if(right > 0){
 				setTag("road",tag);
-				tag++;
-				right--;
-				getRightBST().marcaCarretera(up, right, tag);
+				getRightBST().marcaCarretera(tag+1, up, right-1);
 			}else {
 				setTag("road",tag);
 			}
@@ -764,10 +763,12 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * @return un arbol exactamente igual (misma estructura y contenido) que el arbol this
 	 */
 	public BinarySearchTreeImpl<T> copy(){
-		if(isEmpty())
-		return new BinarySearchTreeImpl<T>(null);
+		if(isEmpty()) {
+			return new BinarySearchTreeImpl<T>(null);
+		}
 		
-		BinarySearchTreeImpl<T> result = this;
+		BinarySearchTreeImpl<T> result = new BinarySearchTreeImpl<T>();
+		result = this;
 		return result;
 		
 	}
@@ -801,67 +802,66 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
      *
 	 */
 	public void remove(T element) {
-		 if(isEmpty())
+		 if(isEmpty()) {
 				throw new NoSuchElementException();
-			
-			if(element == null)
+		 }
+		 if(!contains(element)) {
+				throw new NoSuchElementException();
+		 }
+		if(element == null) {
 				throw new IllegalArgumentException();
-			
-			if(!contains(element))
-				throw new NoSuchElementException();
-			
-			
-			if(content.compareTo(element) != 0 ) {
-				if(content.compareTo(element) < 0) {
-					getRightBST().remove(element);
-				}else if(content.compareTo(element) > 0) {
-					getLeftBST().remove(element);
-				}	
-			}else if(content.compareTo(element) == 0){
-				if(count == 1) {
-					if(isLeaf()) {
-						this.content = null;
-						this.count = 0;
-						setLeftBST(null);
-						setRightBST(null);
-		
-					}else if(getLeftBST().content == null || getRightBST().content == null) {
-						if(getLeftBST().content == null) {
-							content = getRightBST().content;
-							count = getRightBST().count;
-							this.leftSubtree = getRightBST().getLeftBST();
-							this.rightSubtree = getRightBST().getRightBST();
-							getLeftBST().father = this;
-							getRightBST().father = this;
+		}	
+		if(element.compareTo(content) != 0 ) {
+			if(element.compareTo(content) < 0) {
+				getLeftBST().remove(element);
+			}else if(element.compareTo(content) > 0) {
+				getRightBST().remove(element);
+			}	
+		}else{
+			if(count == 1) {
+				if(isLeaf()) {
+					this.content = null;
+					this.count = 0;
+					setLeftBST(null);
+					setRightBST(null);
 
-						}else {
-							content = getLeftBST().content;
-							count = getLeftBST().count;
-							this.rightSubtree = getLeftBST().getRightBST();
-							this.leftSubtree = getLeftBST().getLeftBST();
-							getLeftBST().father = this;
-							getRightBST().father = this;
-						}
-						
+				}else if(getLeftBST().content == null || getRightBST().content == null) {
+					if(getRightBST().content == null) {
+						content = getLeftBST().content;
+						count = getLeftBST().count;
+						this.rightSubtree = getLeftBST().getRightBST();
+						this.leftSubtree = getLeftBST().getLeftBST();
+						getLeftBST().father = this;
+						getRightBST().father = this;
+
 					}else {
-						BinarySearchTreeImpl<T> aux = this;
-
-						aux = aux.getRightBST();
-						
-						while(aux.getLeftBST().content != null) {
-							aux = aux.getLeftBST();
-						}
-						T dato = aux.content;
-						int instances = aux.count;
-						removeAll(dato);
-						
-						this.content = dato;
-						this.count = instances;
+						content = getRightBST().content;
+						count = getRightBST().count;
+						this.leftSubtree = getRightBST().getLeftBST();
+						this.rightSubtree = getRightBST().getRightBST();
+						getLeftBST().father = this;
+						getRightBST().father = this;
 					}
+						
 				}else {
-					count = count - 1;
+					BinarySearchTreeImpl<T> aux = this;
+
+					aux = aux.getRightBST();
+						
+					while(aux.getLeftBST().content != null) {
+						aux = aux.getLeftBST();
+					}
+					T nodo = aux.content;
+					int numero = aux.count;
+					removeAll(nodo);
+						
+					this.content = nodo;
+					this.count = numero;
 				}
+			}else {
+				count = count - 1;
 			}
+		}
 	}
 	
 	/**
@@ -889,7 +889,9 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 			getLeftBST().remove(element,num);
 		}
 		if(num >= count) {
-			remove(content);
+			while(contains(element)) {
+				remove(element);
+			}
 		}else {
 			count = count - num;
 		}

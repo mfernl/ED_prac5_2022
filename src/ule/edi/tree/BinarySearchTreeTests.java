@@ -81,7 +81,35 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	public void testsizeInstances() {
+	    Assert.assertEquals(6,other.size());
+	    other.insert(10);
+	    other.insert(10);
+	    other.insert(10);
+	    Assert.assertEquals(6,other.size());
+	    Assert.assertEquals(9,other.instancesCount());
+	}
+	
+	@Test
 	public void testGetPath() {
+	    Assert.assertEquals("{2, ∅, ∅}",other.getSubtreeWithPath("LL").toString());
+	}
+	
+	@Test
+	public void testGetRoadUpRight() {
+		other.insert(30);
+	    Assert.assertEquals("30",other.getRoadUpRight(2, 2, 2).toString());
+	}
+	
+	@Test
+	public void testCopy() {
+		BinarySearchTreeImpl<Integer> copia = new BinarySearchTreeImpl<Integer>();
+		copia = other.copy();
+	    Assert.assertEquals(copia.toString(),other.toString());
+	}
+	
+	@Test
+	public void testGetSubtreeWithPath() {
 	    Assert.assertEquals("" , ejemplo.getPath(10));
 	    Assert.assertEquals("LL" , ejemplo.getPath(2));
 	    Assert.assertEquals("RL" , ejemplo.getPath(15));
