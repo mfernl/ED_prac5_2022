@@ -102,10 +102,33 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	public void testGetRoadUpRightTags() {
+		ejemplo = new BinarySearchTreeImpl<Integer>();
+		ejemplo.insert(10, 5, 2, 7, 20, 15, 12, 30);
+		ejemplo.getRoadUpRight(7, 2, 2);
+		BinarySearchTreeImpl<Integer> copia = new BinarySearchTreeImpl<Integer>();
+		copia = ejemplo.copy();
+		copia.getRoadUpRight(7,2,2);
+	    Assert.assertEquals("{10 [(road, 3)], {5 [(road, 2)], {2, ∅, ∅}, {7 [(road, 1)], ∅, ∅}}, {20 [(road, 4)], {15, {12, ∅, ∅}, ∅}, {30 [(road, 5)], ∅, ∅}}}",ejemplo.toString());
+	    Assert.assertEquals("{10 [(road, 3)], {5 [(road, 2)], {2, ∅, ∅}, {7 [(road, 1)], ∅, ∅}}, {20 [(road, 4)], {15, {12, ∅, ∅}, ∅}, {30 [(road, 5)], ∅, ∅}}}",copia.toString());
+	}
+	
+	@Test
 	public void testCopy() {
 		BinarySearchTreeImpl<Integer> copia = new BinarySearchTreeImpl<Integer>();
 		copia = other.copy();
 	    Assert.assertEquals(copia.toString(),other.toString());
+	    other.insert(68);
+	    Assert.assertFalse(copia.toString().equals(other.toString()));
+	}
+	
+	@Test
+	public void testRoadUpRightEnCopy() {
+		BinarySearchTreeImpl<Integer> copia = new BinarySearchTreeImpl<Integer>();
+		copia = other.copy();
+	    Assert.assertEquals(copia.toString(),other.toString());
+	    Assert.assertEquals("20",other.getRoadUpRight(2, 2, 1).toString());
+	    Assert.assertEquals("20",copia.getRoadUpRight(2, 2, 1).toString());
 	}
 	
 	@Test

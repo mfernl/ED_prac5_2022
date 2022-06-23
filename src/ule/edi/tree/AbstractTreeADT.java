@@ -77,6 +77,8 @@ public abstract class AbstractTreeADT<T> implements TreeADT<T> {
 		this.content = content;
 	}
 	
+	
+	
 	@Override
 	public T getContent() {
 		return content;

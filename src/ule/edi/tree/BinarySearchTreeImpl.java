@@ -763,15 +763,42 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * @return un arbol exactamente igual (misma estructura y contenido) que el arbol this
 	 */
 	public BinarySearchTreeImpl<T> copy(){
-		if(isEmpty()) {
-			return new BinarySearchTreeImpl<T>(null);
-		}
-		
-		BinarySearchTreeImpl<T> result = new BinarySearchTreeImpl<T>();
-		result = this;
-		return result;
-		
+		BinarySearchTreeImpl<T> clon=null;
+	        if(this.isEmpty()){
+	        	return new BinarySearchTreeImpl<T>(null);
+	        }else{
+	            clon=this.clonarArbol(this, this.father);
+	        }
+	        return clon;
+	    }
+	 
+	public void setFather( BinarySearchTreeImpl<T> content) {
+		this.father = content;
 	}
+	
+	public BinarySearchTreeImpl<T> getFather () {
+		return this.father;
+	}
+	
+	public void setCount(int n) {
+		this.count = n;
+	}
+	    public BinarySearchTreeImpl<T> clonarArbol(BinarySearchTreeImpl<T>clon, BinarySearchTreeImpl<T> papa){
+	    	 
+	        if (clon == null) {
+	            return null;
+	        }
+
+	        BinarySearchTreeImpl<T> copia = new BinarySearchTreeImpl<T>();
+	        copia.setContent(clon.content);
+	        copia.setFather(papa);
+	        copia.setCount(clon.count);
+	        
+	        copia.setRightBST(clonarArbol(clon.getRightBST(),copia));
+	        copia.setLeftBST(clonarArbol(clon.getLeftBST(),copia));
+	        
+	        return copia;
+	    }
 	
 	/**
 	 * Elimina los valores en un array del Arbol.
