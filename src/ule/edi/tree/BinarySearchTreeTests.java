@@ -81,6 +81,13 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	public void testRemoveConHijoDerecha() {
+	    other.remove(12);
+	    other.insert(16);
+	    other.remove(15);
+	}
+	
+	@Test
 	public void testsizeInstances() {
 	    Assert.assertEquals(6,other.size());
 	    other.insert(10);
@@ -91,8 +98,9 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
-	public void testGetPath() {
+	public void testGetSubtreeWithPath() {
 	    Assert.assertEquals("{2, ∅, ∅}",other.getSubtreeWithPath("LL").toString());
+	    Assert.assertEquals("{30, ∅, ∅}",ejemplo.getSubtreeWithPath("RR").toString());
 	}
 	
 	@Test
@@ -132,7 +140,7 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
-	public void testGetSubtreeWithPath() {
+	public void testGetPath() {
 	    Assert.assertEquals("" , ejemplo.getPath(10));
 	    Assert.assertEquals("LL" , ejemplo.getPath(2));
 	    Assert.assertEquals("RL" , ejemplo.getPath(15));
@@ -183,9 +191,51 @@ public class BinarySearchTreeTests {
 	}
 	
 	@Test
+	public void testGetFather() {
+		ejemplo.getLeftBST().getFather();
+	}
+	
+	@Test
+	public void testEmptyBSt() {
+		ejemplo.empty();
+	}
+	
+	@Test
+	public void testRemoveArray() {
+		Integer[] array ={10,30};
+		ejemplo.remove(array);
+		Assert.assertEquals("{15, {5, {2, ∅, ∅}, ∅}, {20, ∅, ∅}}",ejemplo.toString());
+	}
+	
+	@Test
+	public void testInsertCollection() {
+		LinkedList<Integer> lista = new LinkedList<Integer>();
+		lista.add(20);
+		lista.add(20);
+		ejemplo.insert(lista);
+		Assert.assertEquals("{10, {5, {2, ∅, ∅}, ∅}, {20(3), {15, ∅, ∅}, {30, ∅, ∅}}}",ejemplo.toString());
+	}
+	
+	@Test
+	public void testRemove() {
+		ejemplo.insert(30);
+		ejemplo.remove(30,2);
+		Assert.assertEquals("{10, {5, {2, ∅, ∅}, ∅}, {20, {15, ∅, ∅}, ∅}}",ejemplo.toString());
+		ejemplo.remove(2,2);
+		ejemplo.insert(5);
+		ejemplo.remove(5,1);
+	}
+	
+	@Test
 	public void testRemove1Hijo() {
 		ejemplo.remove(5);
 		Assert.assertEquals("{10, {2, ∅, ∅}, {20, {15, ∅, ∅}, {30, ∅, ∅}}}",ejemplo.toString());
+	}
+	
+	@Test
+	public void testCopyEmpty() {
+		BinarySearchTreeImpl<Integer> vacio = new BinarySearchTreeImpl<Integer>();
+		vacio.copy();
 	}
 	
 	@Test
@@ -232,7 +282,72 @@ public class BinarySearchTreeTests {
 			other.insert(i);	
 		}
 		
+		@Test(expected = IllegalArgumentException.class)
+		public void testRemoveIllegalElement() {
+			Integer i = null;
+			other.remove(i);
+		}
+		
+		@Test(expected = IllegalArgumentException.class)
+		public void testRemoveIllegal() {
+			ejemplo.remove(null,3);	
+		}
+		@Test(expected = NoSuchElementException.class)
+		public void testRemoveNoSuch() {
+			ejemplo.remove(65,3);		
+		}
 	
+		@Test(expected = NoSuchElementException.class)
+		public void testGetSubtreeWithPathNoR() {
+			other.getSubtreeWithPath("RR");		
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testGetPathNoElem() {
+			other.getPath(89);		
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testNoRightCamino() {
+			other.getRoadUpRight(2, 2, 2);
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testNoUpCamino() {
+			other.getRoadUpRight(20, 2, 2);	
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testGetRoadUpRightNoElem() {
+			other.getRoadUpRight(89, 2, 2);	
+		}
+		
+		@Test(expected = IllegalArgumentException.class)
+		public void testGetRoadUpRightElemNull() {
+			other.getRoadUpRight(null, 2, 2);	
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testRemoveAllNoelem() {
+			other.removeAll(89);	
+		}
+		
+		@Test(expected = IllegalArgumentException.class)
+		public void testRemoveAllNull() {
+			other.removeAll(null);	
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testGetSubtreeWithPathNoL() {
+			ejemplo.getSubtreeWithPath("RLL");		
+		}
+		
+		@Test(expected = NoSuchElementException.class)
+		public void testRemoveEmpty() {
+			BinarySearchTreeImpl<Integer> prueba = new BinarySearchTreeImpl<Integer>();		
+			prueba.remove(12);
+		}
+		
 		@Test(expected = IllegalArgumentException.class)
 		public void testContainsNull() {
 			other.contains(null);

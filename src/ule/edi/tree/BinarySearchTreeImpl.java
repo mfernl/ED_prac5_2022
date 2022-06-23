@@ -702,11 +702,11 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * @throws IllegalArgumentException si element es null
 	 */
 	public T getRoadUpRight(T elem, int up, int right) {
-		if(!contains(elem)) {
-			throw new NoSuchElementException();
-		}
 		if(elem == null) {
 			throw new IllegalArgumentException();
+		}
+		if(!contains(elem)) {
+			throw new NoSuchElementException();
 		}
 		int tag = 1;
 		T result = startRoad(elem).camino(up, right);
@@ -832,12 +832,12 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 		 if(isEmpty()) {
 				throw new NoSuchElementException();
 		 }
+		 if(element == null) {
+				throw new IllegalArgumentException();
+		}
 		 if(!contains(element)) {
 				throw new NoSuchElementException();
-		 }
-		if(element == null) {
-				throw new IllegalArgumentException();
-		}	
+		 }	
 		if(element.compareTo(content) != 0 ) {
 			if(element.compareTo(content) < 0) {
 				getLeftBST().remove(element);
@@ -903,11 +903,11 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * @throws IllegalArgumentException si element es null
 	 */
 	public void remove(T element, int num) {
-		if(!contains(element)) {
-			throw new NoSuchElementException();
-		}
 		if(element == null) {
 			throw new IllegalArgumentException();
+		}
+		if(!contains(element)) {
+			throw new NoSuchElementException();
 		}
 		if(element.compareTo(content)>0) {
 			getRightBST().remove(element,num);
@@ -938,11 +938,11 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 	 * @throws IllegalArgumentException si element es null
 	 */
 	public int removeAll(T element) {
-		if(!contains(element)) {
-			throw new NoSuchElementException();
-		}
 		if(element == null) {
 			throw new IllegalArgumentException();
+		}
+		if(!contains(element)) {
+			throw new NoSuchElementException();
 		}
 		int contador = 0;
 		while(contains(element)) {
@@ -952,6 +952,10 @@ public class BinarySearchTreeImpl<T extends Comparable<? super T>> extends Abstr
 		return contador;
 	}
 
+	
+	public void empty (){
+		this.emptyBST(father);
+	}
 	
 }
 	
